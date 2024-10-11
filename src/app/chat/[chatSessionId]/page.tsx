@@ -165,7 +165,29 @@ const invokeBedrockModelParseBodyGetText = async (prompt: string) => {
     console.log('Bedrock Response Body: ', bedrockResponseBody)
     return bedrockResponseBody.content.map(item => item.text).join('\n')
 }
- 
+
+const parseAgentResponse = (body: string) => { //TODO, there's surely a better way to do this.
+    // Extract the JSON part (this is the string starting from {"bytes":...)
+    const jsonString = body.match(/{\"bytes\":.*}/)?.[0];
+
+    if (jsonString) {
+        // Parse the JSON string
+        const jsonResponse = JSON.parse(jsonString);
+
+        // Extract and decode the base64-encoded bytes
+        const base64String = jsonResponse.bytes;
+
+        // Decode the base64 string
+        const buffer = Buffer.from(base64String, 'base64');
+        const decodedString = buffer.toString('utf-8');
+
+        console.log('Decoded string:', decodedString);
+        return decodedString
+    } else {
+        console.log('Could not extract JSON from the body.');
+    }
+
+}
 
 const invokeBedrockAgentParseBodyGetText = async (prompt: string, chatSession: Schema['ChatSession']['type']) => {
     console.log('Prompt: ', prompt)
@@ -180,16 +202,19 @@ const invokeBedrockAgentParseBodyGetText = async (prompt: string, chatSession: S
         console.log('No response from bedrock agent after prompt: ', prompt)
         return
     }
+    const bedrockAgentResponseText = parseAgentResponse(response.data.body)
     // const bedrockAgentResponseBody = new TextDecoder().decode(response.data.body)
-    const bedrockAgentResponseBody = new TextDecoder().decode(Buffer.from(response.data.body))
+    // const bedrockAgentResponseBody = Buffer.from(response.data.body).toString('utf-8')
     // const bedrockAgentResponseBody = Buffer.from(response.data.body).toString() as InvokeBedrockAgentResponseType
     // const bedrockAgentResponseBody = JSON.parse(response.data.body) as InvokeBedrockAgentResponseType
-    console.log('Bedrock Response Body: ', bedrockAgentResponseBody)
+    console.log('Bedrock Agent Response Text: ', bedrockAgentResponseText)
     // return bedrockAgentResponseBody.chunk?.bytes
     // if (!(bedrockAgentResponseBody.chunk && bedrockAgentResponseBody.chunk.bytes)) return;
 
-    return 'test'
+    return bedrockAgentResponseText
 }
+
+
 
 const getAgentAliasId = async (agentId: string) => {
     const response = await amplifyClient.queries.listBedrockAgentAliasIds({ agentId: agentId })
