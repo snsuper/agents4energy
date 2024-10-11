@@ -208,12 +208,8 @@ const invokeBedrockAgentParseBodyGetText = async (prompt: string, chatSession: S
     // const bedrockAgentResponseBody = Buffer.from(response.data.body).toString() as InvokeBedrockAgentResponseType
     // const bedrockAgentResponseBody = JSON.parse(response.data.body) as InvokeBedrockAgentResponseType
     console.log('Bedrock Agent Response Text: ', bedrockAgentResponseText)
-    // return bedrockAgentResponseBody.chunk?.bytes
-    // if (!(bedrockAgentResponseBody.chunk && bedrockAgentResponseBody.chunk.bytes)) return;
-
     return bedrockAgentResponseText
 }
-
 
 
 const getAgentAliasId = async (agentId: string) => {
@@ -274,6 +270,8 @@ function Page({ params }: { params?: { chatSessionId: string } }) {
                     console.log(`Chat session ${params.chatSessionId} not found`)
                 }
             })
+        } else {
+            console.log("No chat session id in params: ", params)
         }
     }, [params])
 
@@ -336,7 +334,9 @@ function Page({ params }: { params?: { chatSessionId: string } }) {
                 if (chatSession.firstMessage) {
                     addUserChatMessage(chatSession.firstMessage, newChatSession.id);
                 }
-                router.push(`/chat?chatSessionId=${newChatSession.id}`)
+                // window.location.replace(`/chat/${newChatSession.id}`)
+                router.push(`/chat/${newChatSession.id}`)
+                
             }
         })
     }
@@ -420,7 +420,7 @@ function Page({ params }: { params?: { chatSessionId: string } }) {
                     })
                     .map((session) => (
 
-                        <Card key={session.id} sx={{ marginBottom: 2, backgroundColor: '#f5f5f5' }}>
+                        <Card key={session.id} sx={{ marginBottom: 2, backgroundColor: '#f5f5f5', flexShrink: 0 }}>
                             <CardContent>
                                 <Typography variant="h6" component="div" noWrap>
                                     {session.firstMessage?.slice(0, 50)}
