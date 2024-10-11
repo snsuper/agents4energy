@@ -12,8 +12,9 @@ import {
   Link
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import DropdownMenu from '@/components/DropDownMenu';
 
-import { useAuthenticator } from '@aws-amplify/ui-react';
+import { Button, useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchUserAttributes, FetchUserAttributesOutput } from 'aws-amplify/auth';
 
 const getUserAttributes = async () => {
@@ -30,12 +31,8 @@ const TopNavBar = () => {
   const { user, signOut, authStatus } = useAuthenticator(context => [context.user, context.authStatus]);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  // const { user, signOut } = useAuthenticator(context => [context.user]);
-  // const { authStatus } = useAuthenticator(context => [context.authStatus]);
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
+  //TODO Impliment the dropdown menu for the user menu
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -60,7 +57,10 @@ const TopNavBar = () => {
   }, [user])
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="fixed"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    >
       <Toolbar>
         <IconButton
           size="large"
@@ -74,12 +74,12 @@ const TopNavBar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           AWS Agents For Energy
         </Typography>
-
         {authStatus === 'authenticated' && userAttributes?.email ? (
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Typography sx={{ textAlign: 'center' }}>{userAttributes.email}</Typography>
+                <Typography sx={{ textAlign: 'center' }}>{userAttributes.email}</Typography>
               </IconButton>
             </Tooltip>
             <Menu
@@ -98,7 +98,6 @@ const TopNavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-
               <MenuItem key='logout' onClick={signOut}>
                 <Typography sx={{ textAlign: 'center' }}>logout</Typography>
               </MenuItem>
