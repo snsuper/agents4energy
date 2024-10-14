@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import type { Schema } from '@/../amplify/data/resource';
-import { amplifyClient } from '@/utils/amplify-utils';
+import { amplifyClient, invokeBedrockModelParseBodyGetText } from '@/utils/amplify-utils';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useRouter } from 'next/navigation';
 
@@ -20,7 +20,8 @@ import {
     Card,
     CardContent,
     CardActions,
-    Button
+    Button,
+    CircularProgress
 } from '@mui/material';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -30,22 +31,22 @@ import { withAuth } from '@/components/WithAuth';
 
 const drawerWidth = 240;
 
-type BedrockAnthropicBodyType = {
-    id: string;
-    type: string;
-    role: string;
-    model: string;
-    content: {
-        type: string;
-        text: string;
-    }[];
-    stop_reason: string;
-    stop_sequence: null;
-    usage: {
-        input_tokens: number;
-        output_tokens: number;
-    };
-};
+// type BedrockAnthropicBodyType = {
+//     id: string;
+//     type: string;
+//     role: string;
+//     model: string;
+//     content: {
+//         type: string;
+//         text: string;
+//     }[];
+//     stop_reason: string;
+//     stop_sequence: null;
+//     usage: {
+//         input_tokens: number;
+//         output_tokens: number;
+//     };
+// };
 
 type ListBedrockAgentsResponseType = {
     agentSummaries: {
@@ -76,18 +77,18 @@ type ListAgentIdsResponseType = {
     nextToken: string
 }
 
-const invokeBedrockModelParseBodyGetText = async (prompt: string) => {
-    console.log('Prompt: ', prompt)
-    const response = await amplifyClient.queries.invokeBedrock({ prompt: prompt })
-    console.log('Bedrock Response: ', response.data)
-    if (!(response.data && response.data.body)) {
-        console.log('No response from bedrock after prompt: ', prompt)
-        return
-    }
-    const bedrockResponseBody = JSON.parse(response.data.body) as BedrockAnthropicBodyType
-    console.log('Bedrock Response Body: ', bedrockResponseBody)
-    return bedrockResponseBody.content.map(item => item.text).join('\n')
-}
+// export const invokeBedrockModelParseBodyGetText = async (prompt: string) => {
+//     console.log('Prompt: ', prompt)
+//     const response = await amplifyClient.queries.invokeBedrock({ prompt: prompt })
+//     console.log('Bedrock Response: ', response.data)
+//     if (!(response.data && response.data.body)) {
+//         console.log('No response from bedrock after prompt: ', prompt)
+//         return
+//     }
+//     const bedrockResponseBody = JSON.parse(response.data.body) as BedrockAnthropicBodyType
+//     console.log('Bedrock Response Body: ', bedrockResponseBody)
+//     return bedrockResponseBody.content.map(item => item.text).join('\n')
+// }
 
 const invokeBedrockAgentParseBodyGetText = async (prompt: string, chatSession: Schema['ChatSession']['type']) => {
     console.log('Prompt: ', prompt)
@@ -400,10 +401,12 @@ function Page({ params }: { params?: { chatSessionId: string } }) {
                 />
                 <Box sx={{ mt: 5 }}>
                     {
-                        !isLoading && (
+                        !isLoading ? (
                             <Typography variant="body2">
                                 Suggested Follow Ups:
                             </Typography>
+                        ) : (
+                            <CircularProgress/>
                         )
                     }
                 </Box>
