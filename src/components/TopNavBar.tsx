@@ -63,12 +63,17 @@ const TopNavBar = () => {
       sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Link color="inherit" href='/' sx={{ textDecoration: 'none' }}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               AWS Agents For Energy
             </Typography>
           </Link>
+        </Box>
+
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+
 
           <Link color="inherit" href='/chat' sx={{ textDecoration: 'none' }}>Chat</Link>
 
