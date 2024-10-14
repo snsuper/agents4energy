@@ -73,9 +73,11 @@ const TopNavBar = () => {
 
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-
-
-          <Link color="inherit" href='/chat' sx={{ textDecoration: 'none' }}>Chat</Link>
+          <Link color="inherit" href='/chat' sx={{ textDecoration: 'none' }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Chat
+            </Typography>
+          </Link>
 
           {authStatus === 'authenticated' && userAttributes?.email ? (
 
@@ -107,10 +109,11 @@ const TopNavBar = () => {
 
               </Menu>
             </Box>
-
-
-
-          ) : <Link color="inherit" href='/login' sx={{ textDecoration: 'none' }}>Login</Link>
+          ) : <Link color="inherit" href='/login' sx={{ textDecoration: 'none' }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Login
+            </Typography>
+          </Link>
           }
         </Box>
       </Toolbar>
