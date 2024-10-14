@@ -1,9 +1,9 @@
 import {
-  Box,
+  // Box,
   Button,
   Container,
   Popover,
-  Spinner,
+  // Spinner,
   StatusIndicator
 } from "@cloudscape-design/components";
 
@@ -86,10 +86,10 @@ export default function ChatUIMessage(props: ChatUIMessageProps) {
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
-                table: ({ node, ...props }) => (
+                table: ({ ...props }) => (
                   <table className={styles.markdownTable} {...props} />
                 ),
-                tr: ({ node, ...props }) => {
+                tr: ({ ...props }) => {
 
                   //Get the value of the relevance score in each table row
                   const children = React.Children.toArray(props.children);

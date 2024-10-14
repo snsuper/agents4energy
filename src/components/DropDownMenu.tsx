@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button, Menu } from '@mui/material';
 
 interface DropdownMenuProps {
   children: ReactNode;

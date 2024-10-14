@@ -1,5 +1,5 @@
 'use client';
-import { Authenticator, Text, View, useAuthenticator } from '@aws-amplify/ui-react';
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { redirect } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { Hub } from 'aws-amplify/utils';

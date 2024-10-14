@@ -11,10 +11,10 @@ import {
   MenuItem,
   Link
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import DropdownMenu from '@/components/DropDownMenu';
+// import MenuIcon from '@mui/icons-material/Menu';
+// import DropdownMenu from '@/components/DropDownMenu';
 
-import { Button, useAuthenticator } from '@aws-amplify/ui-react';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchUserAttributes, FetchUserAttributesOutput } from 'aws-amplify/auth';
 
 const getUserAttributes = async () => {
@@ -29,7 +29,7 @@ const getUserAttributes = async () => {
 const TopNavBar = () => {
   const [userAttributes, setUserAttributes] = useState<FetchUserAttributesOutput | null>();
   const { user, signOut, authStatus } = useAuthenticator(context => [context.user, context.authStatus]);
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  // const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   //TODO Impliment the dropdown menu for the user menu
@@ -37,9 +37,9 @@ const TopNavBar = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  // const handleCloseNavMenu = () => {
+  //   setAnchorElNav(null);
+  // };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);

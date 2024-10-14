@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { withAuth } from '@/components/WithAuth';
 import { amplifyClient } from '@/utils/amplify-utils';
-import type { Schema } from '@/../amplify/data/resource';
+// import type { Schema } from '@/../amplify/data/resource';
 
 type BedrockAnthropicBodyType = {
     id: string;

@@ -14,14 +14,7 @@ import {
     Typography,
     Box,
     Drawer,
-    Link,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemButton,
-    ListItemText,
     Toolbar,
-    Menu,
     MenuItem,
     IconButton,
     Card,
@@ -83,75 +76,75 @@ type ListAgentIdsResponseType = {
     nextToken: string
 }
 
-type InvokeBedrockAgentResponseType = {
-    accessDeniedException?: Record<string, never>;
-    badGatewayException?: Record<string, never>;
-    chunk?: {
-        attribution: {
-            citations: Array<{
-                generatedResponsePart: {
-                    textResponsePart: {
-                        span: {
-                            end: number;
-                            start: number;
-                        };
-                        text: string;
-                    };
-                };
-                retrievedReferences: Array<{
-                    content: {
-                        text: string;
-                    };
-                    location: {
-                        confluenceLocation?: {
-                            url: string;
-                        };
-                        s3Location?: {
-                            uri: string;
-                        };
-                        salesforceLocation?: {
-                            url: string;
-                        };
-                        sharePointLocation?: {
-                            url: string;
-                        };
-                        type: string;
-                        webLocation?: {
-                            url: string;
-                        };
-                    };
-                    metadata: Record<string, unknown>;
-                }>;
-            }>;
-        };
-        bytes: Blob;
-    };
-    conflictException?: Record<string, never>;
-    dependencyFailedException?: Record<string, never>;
-    files?: {
-        files: Array<{
-            bytes: Blob;
-            name: string;
-            type: string;
-        }>;
-    };
-    internalServerException?: Record<string, never>;
-    resourceNotFoundException?: Record<string, never>;
-    returnControl?: {
-        invocationId: string;
-        invocationInputs: Array<unknown>;
-    };
-    serviceQuotaExceededException?: Record<string, never>;
-    throttlingException?: Record<string, never>;
-    trace?: {
-        agentAliasId: string;
-        agentId: string;
-        agentVersion: string;
-        sessionId: string;
-        trace: unknown;
-    };
-    validationException?: Record<string, never>;
-};
+// type InvokeBedrockAgentResponseType = {
+//     accessDeniedException?: Record<string, never>;
+//     badGatewayException?: Record<string, never>;
+//     chunk?: {
+//         attribution: {
+//             citations: Array<{
+//                 generatedResponsePart: {
+//                     textResponsePart: {
+//                         span: {
+//                             end: number;
+//                             start: number;
+//                         };
+//                         text: string;
+//                     };
+//                 };
+//                 retrievedReferences: Array<{
+//                     content: {
+//                         text: string;
+//                     };
+//                     location: {
+//                         confluenceLocation?: {
+//                             url: string;
+//                         };
+//                         s3Location?: {
+//                             uri: string;
+//                         };
+//                         salesforceLocation?: {
+//                             url: string;
+//                         };
+//                         sharePointLocation?: {
+//                             url: string;
+//                         };
+//                         type: string;
+//                         webLocation?: {
+//                             url: string;
+//                         };
+//                     };
+//                     metadata: Record<string, unknown>;
+//                 }>;
+//             }>;
+//         };
+//         bytes: Blob;
+//     };
+//     conflictException?: Record<string, never>;
+//     dependencyFailedException?: Record<string, never>;
+//     files?: {
+//         files: Array<{
+//             bytes: Blob;
+//             name: string;
+//             type: string;
+//         }>;
+//     };
+//     internalServerException?: Record<string, never>;
+//     resourceNotFoundException?: Record<string, never>;
+//     returnControl?: {
+//         invocationId: string;
+//         invocationInputs: Array<unknown>;
+//     };
+//     serviceQuotaExceededException?: Record<string, never>;
+//     throttlingException?: Record<string, never>;
+//     trace?: {
+//         agentAliasId: string;
+//         agentId: string;
+//         agentVersion: string;
+//         sessionId: string;
+//         trace: unknown;
+//     };
+//     validationException?: Record<string, never>;
+// };
 
 const invokeBedrockModelParseBodyGetText = async (prompt: string) => {
     console.log('Prompt: ', prompt)
@@ -300,7 +293,7 @@ function Page({ params }: { params?: { chatSessionId: string } }) {
                     chatSessionId: { eq: activeChatSession.id }
                 }
             }).subscribe({
-                next: ({ items, isSynced }) => {
+                next: ({ items }) => { //isSynced is an option here to
                     setMessages((prevMessages) => combineAndSortMessages(prevMessages, items))
                 }
             }
@@ -332,7 +325,7 @@ function Page({ params }: { params?: { chatSessionId: string } }) {
             if (newChatSession) {
                 setActiveChatSession(newChatSession);
                 if (chatSession.firstMessage) {
-                    addUserChatMessage(chatSession.firstMessage, newChatSession.id);
+                    addUserChatMessage(chatSession.firstMessage);
                 }
                 // window.location.replace(`/chat/${newChatSession.id}`)
                 router.push(`/chat/${newChatSession.id}`)
@@ -359,7 +352,7 @@ function Page({ params }: { params?: { chatSessionId: string } }) {
         }
     }
 
-    async function addUserChatMessage(body: string, chatSessionId?: string) {
+    async function addUserChatMessage(body: string) {
         await addChatMessage(body, "human")
         sendMessageToChatBot(body);
     }
